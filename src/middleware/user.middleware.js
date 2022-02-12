@@ -1,5 +1,5 @@
 const { getUserInfo } = require("../service/user.service");
-const { userFormatError, userAlreadyExited } = require("../constant/error.type");
+const { userFormatError, userAlreadyExited, userDoesNotExit, invalidPassword } = require("../constant/error.type");
 const bcrypt = require("bcryptjs");
 
 //验证用户名密码不为空
@@ -27,6 +27,7 @@ const verifyUser = async (ctx, next) => {
         console.error("获取用户信息错误", err);
         ctx.status = 500;
         ctx.body = userAlreadyExited;
+        return;
     }
     await next();
 }
@@ -40,8 +41,33 @@ const encrpytPassword = async (ctx, next) => {
     await next();
 }
 
+//验证用户名密码是否匹配
+const verifyLogin = async (ctx, next) => {
+    const { username, password } = ctx.request.body;
+    try {
+        const res = await getUserInfo({ username });
+        if (!res) {
+            ctx.status = 403;
+            ctx.body = userDoesNotExit;
+            return;
+        }
+        if (!bcrypt.compareSync(password, res.password)) {
+            ctx.status = 403;
+            ctx.body = invalidPassword;
+            return;
+        }
+    } catch (err) {
+        console.error("获取用户信息错误", err);
+        ctx.status = 500;
+        ctx.body = userAlreadyExited;
+        return;
+    }
+    await next();
+}
+
 module.exports = {
     userValidator,
     verifyUser,
-    encrpytPassword
+    encrpytPassword,
+    verifyLogin
 };

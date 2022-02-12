@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
+const { DATABASE } = require("../constant/env");
 
-const seq = new Sequelize("db_dailyreportsystem", "root", "bd46wzj66els", {
+const seq = new Sequelize(DATABASE.name, DATABASE.username, DATABASE.password, {
     host: "localhost",
     dialect: "mysql"
 });

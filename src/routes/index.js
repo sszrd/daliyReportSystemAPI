@@ -1,7 +1,11 @@
 const Router = require("koa-router");
-const indexRouter = new Router();
-indexRouter.get("/", (ctx, next) => {
-  ctx.body = "hello index";
+const router = new Router();
+const fs = require("fs");
+
+fs.readdirSync(__dirname).forEach(file => {
+  if (file !== "index.js") {
+    router.use(require("./" + file).routes());
+  }
 })
 
-module.exports = indexRouter;
+module.exports = router;
