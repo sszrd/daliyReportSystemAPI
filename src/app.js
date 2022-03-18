@@ -6,6 +6,7 @@ const router = require('./routes/index');
 
 app.use(KoaBody());
 app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen(3000, () => {
   console.log("server is running on http://localhost:3000");
