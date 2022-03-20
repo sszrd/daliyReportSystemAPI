@@ -57,7 +57,6 @@ const verifyLogin = async (ctx, next) => {
             return;
         }
     } catch (err) {
-        console.error("获取用户信息错误", err);
         ctx.status = 500;
         ctx.body = userAlreadyExited;
         return;

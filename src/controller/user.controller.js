@@ -9,7 +9,7 @@ class UserController {
         try {
             const res = await createUser(username, password);
             ctx.body = {
-                code: 0,
+                code: 200,
                 messgae: "注册成功",
                 result: {
                     id: res.id,
@@ -28,7 +28,7 @@ class UserController {
         try {
             const { password, ...res } = await getUserInfo({ username });
             ctx.body = {
-                code: 0,
+                code: 200,
                 message: "登陆成功",
                 result: {
                     token: jwt.sign(res, JWT_SECRET, { expiresIn: "1d" })
@@ -47,13 +47,13 @@ class UserController {
         try {
             if (await updateById({ id, password })) {
                 ctx.body = {
-                    code: 0,
+                    code: 200,
                     message: "修改密码成功",
                     result: {}
                 }
             } else {
                 ctx.body = {
-                    code: 0,
+                    code: 409,
                     message: "修改密码失败",
                     result: {}
                 }
