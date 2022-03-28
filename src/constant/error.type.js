@@ -58,5 +58,45 @@ module.exports = {
         code: "500",
         message: "查询日报失败",
         result: {}
+    },
+    itemFindError: {
+        code: "500",
+        message: "查询条目失败",
+        result: {}
+    },
+    itemRemoveError: {
+        code: "500",
+        message: "删除条目失败",
+        result: {}
+    },
+    itemUpdateError: {
+        code: "500",
+        message: "更新条目失败",
+        result: {}
+    },
+    addItemError: {
+        code: "500",
+        message: "添加条目失败",
+        result: {}
+    },
+    addPlanError: {
+        code: "500",
+        message: "添加计划失败",
+        result: {}
+    },
+    planFindError: {
+        code: "500",
+        message: "查询计划失败",
+        result: {}
+    },
+    planRemoveError: {
+        code: "500",
+        message: "删除计划失败",
+        result: {}
+    },
+    planUpdateError: {
+        code: "500",
+        message: "更新计划失败",
+        result: {}
     }
 }
