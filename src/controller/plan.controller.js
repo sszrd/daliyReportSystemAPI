@@ -5,12 +5,14 @@ class PlanController {
     async submit(ctx, next) {
         const {
             target,
+            startAt,
             deadline,
         } = ctx.request.body;
         const userId = ctx.state.user.id;
         try {
             const res = await createPlan({
                 target,
+                startAt,
                 deadline,
                 userId
             })
@@ -33,6 +35,7 @@ class PlanController {
             target,
             progress,
             totalTime,
+            startAt,
             deadline
         } = ctx.request.body;
         const { id } = ctx.params;
@@ -43,6 +46,7 @@ class PlanController {
                 target,
                 progress,
                 totalTime,
+                startAt,
                 deadline,
                 userId
             })) {

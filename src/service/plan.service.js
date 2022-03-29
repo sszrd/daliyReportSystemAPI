@@ -7,6 +7,7 @@ class PlanService {
         progress,
         totalTime,
         userId,
+        startAt,
         deadline
     }) {
         const res = await Plan.create({
@@ -14,6 +15,7 @@ class PlanService {
             progress,
             totalTime,
             userId,
+            startAt,
             deadline
         });
         return res.dataValues;
@@ -25,6 +27,7 @@ class PlanService {
         target,
         progress,
         totalTime,
+        startAt,
         deadline
     }) {
         const whereOpt = { id, userId };
@@ -32,6 +35,7 @@ class PlanService {
         target && Object.assign(newPlan, { target });
         progress && Object.assign(newPlan, { progress });
         totalTime && Object.assign(newPlan, { totalTime });
+        startAt && Object.assign(newPlan, { startAt });
         deadline && Object.assign(newPlan, { deadline });
         const res = await Plan.update(newPlan, { where: whereOpt });
         return res[0] > 0 ? true : false;
@@ -43,6 +47,7 @@ class PlanService {
         target,
         progress,
         totalTime,
+        startAt,
         deadline,
     }) {
         const whereOpt = {};
@@ -50,6 +55,7 @@ class PlanService {
         target && Object.assign(whereOpt, { target });
         progress && Object.assign(whereOpt, { progress });
         totalTime && Object.assign(whereOpt, { totalTime });
+        startAt && Object.assign(whereOpt, { startAt });
         deadline && Object.assign(whereOpt, { deadline });
         userId && Object.assign(whereOpt, { userId });
         const res = await Plan.findAll({

@@ -25,6 +25,11 @@ const Plan = seq.define("plan", {
         allowNull: false,
         comment: "作者"
     },
+    startAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        comment: "计划开始日期"
+    },
     deadline: {
         type: DataTypes.DATE,
         allowNull: false,
