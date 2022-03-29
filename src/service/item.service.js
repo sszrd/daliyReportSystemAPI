@@ -22,7 +22,9 @@ class ItemService {
         const whereOpt = { id };
         const newItem = {};
         text && Object.assign(newItem, { target });
-        isFinish && Object.assign(newItem, { isFinish });
+        if (isFinish !== undefined) {
+            Object.assign(newItem, { isFinish });
+        }
         const res = await Item.update(newItem, { where: whereOpt });
         return res[0] > 0 ? true : false;
     }
