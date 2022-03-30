@@ -21,7 +21,7 @@ class ItemService {
     }) {
         const whereOpt = { id };
         const newItem = {};
-        text && Object.assign(newItem, { target });
+        text && Object.assign(newItem, { text });
         if (isFinish !== undefined) {
             Object.assign(newItem, { isFinish });
         }
