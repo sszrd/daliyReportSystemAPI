@@ -33,8 +33,12 @@ class PlanService {
         const whereOpt = { id, userId };
         const newPlan = {};
         target && Object.assign(newPlan, { target });
-        progress && Object.assign(newPlan, { progress });
-        totalTime && Object.assign(newPlan, { totalTime });
+        if (progress !== undefined) {
+            Object.assign(newPlan, { progress });
+        }
+        if (totalTime !== undefined) {
+            Object.assign(newPlan, { totalTime });
+        }
         startAt && Object.assign(newPlan, { startAt });
         deadline && Object.assign(newPlan, { deadline });
         const res = await Plan.update(newPlan, { where: whereOpt });
