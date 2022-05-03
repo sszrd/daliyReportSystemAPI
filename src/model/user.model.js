@@ -13,6 +13,12 @@ const User = seq.define("user", {
         allowNull: false,
         comment: "密码"
     },
+    teamId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: "所属团队"
+    },
     isadmin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

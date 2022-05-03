@@ -3,7 +3,7 @@ const app = new Koa();
 const KoaBody = require("koa-body");
 const cors = require("koa2-cors");
 
-const router = require('./routes/index');
+const router = require('./routes/index.js');
 
 app.use(cors({
   origin: function (ctx) {

@@ -1,78 +1,164 @@
-const Report = require("../model/report.model.js");
+const { Report } = require("../model/index.model.js");
+const { addReportError, reportUpdateError, reportRemoveError, reportFindError } = require("../constant/error.type");
 
 class ReportService {
-    async createReport({
-        title,
-        finish,
-        unfinish,
-        thinking,
-        time,
-        percent,
-        userId
-    }) {
-        const res = await Report.create({
+    async createReport(ctx, next) {
+        const {
             title,
             finish,
             unfinish,
             thinking,
             time,
-            percent,
-            userId
-        });
-        return res.dataValues;
+            taskId
+        } = ctx.request.body;
+        const createdBy = ctx.state.user.id;
+        try {
+            let res = await Report.create({
+                title,
+                finish,
+                unfinish,
+                thinking,
+                time,
+                createdBy,
+                taskId
+            });
+            res = res ? res.dataValues : null;
+            ctx.body = {
+                code: 200,
+                messgae: "添加成功",
+                result: {
+                    ...res
+                }
+            }
+        } catch (err) {
+            console.error("添加日报失败", err);
+            ctx.status = 500;
+            ctx.body = addReportError;
+        }
     }
 
-    async updateById({
-        id,
-        title,
-        finish,
-        unfinish,
-        thinking,
-        time,
-        percent,
-        userId
-    }) {
-        const whereOpt = { id, userId };
+    async updateById(ctx, next) {
+        const {
+            title,
+            finish,
+            unfinish,
+            thinking,
+            time,
+        } = ctx.request.body;
+        const { id } = ctx.params;
+        const whereOpt = { id };
         const newReport = {};
         title && Object.assign(newReport, { title });
         finish && Object.assign(newReport, { finish });
         unfinish && Object.assign(newReport, { unfinish });
         thinking && Object.assign(newReport, { thinking });
         time && Object.assign(newReport, { time });
-        percent && Object.assign(newReport, { percent });
         const res = await Report.update(newReport, { where: whereOpt });
-        return res[0] > 0 ? true : false;
+        try {
+            if (res[0] > 0) {
+                ctx.body = {
+                    code: 200,
+                    message: "修改日报成功",
+                    result: {}
+                }
+            } else {
+                ctx.body = {
+                    code: 409,
+                    message: "修改日报失败",
+                    result: {}
+                }
+            }
+        } catch (err) {
+            console.error("修改日报失败", err);
+            ctx.status = 500;
+            ctx.body = reportUpdateError;
+        }
     }
 
-    async getReportInfo({
-        id,
-        title,
-        finish,
-        unfinish,
-        thinking,
-        time,
-        percent,
-        userId
-    }) {
+    async getReportById(ctx, next) {
+        const { id } = ctx.params;
         const whereOpt = {};
         id && Object.assign(whereOpt, { id });
-        title && Object.assign(whereOpt, { title });
-        finish && Object.assign(whereOpt, { finish });
-        unfinish && Object.assign(whereOpt, { unfinish });
-        thinking && Object.assign(whereOpt, { thinking });
-        time && Object.assign(whereOpt, { time });
-        percent && Object.assign(whereOpt, { percent });
-        userId && Object.assign(whereOpt, { userId });
+        try {
+            let res = await Report.findOne({
+                where: whereOpt
+            })
+            res = res ? res.dataValues : null;
+            ctx.body = {
+                code: 200,
+                messgae: "查询成功",
+                result: {
+                    ...res
+                }
+            }
+        } catch (err) {
+            console.error("通过id查询日报失败", err);
+            ctx.status = 500;
+            ctx.body = reportFindError;
+        }
+    }
+
+    async getReportsByUser(ctx, next) {
+        const createdBy = ctx.state.user.id;
+        const whereOpt = {};
+        createdBy && Object.assign(whereOpt, { createdBy });
+        try {
+            const res = await Report.findAll({
+                where: whereOpt
+            })
+            res = res ? res.map(item => item.dataValues) : null;
+            ctx.body = {
+                code: 200,
+                messgae: "查询成功",
+                result: {
+                    ...res
+                }
+            }
+        } catch (err) {
+            console.error("通过用户id查询日报失败", err);
+            ctx.status = 500;
+            ctx.body = reportFindError;
+        }
+    }
+
+    async getReportsByTask(taskId) {
+        const whereOpt = {};
+        taskId && Object.assign(whereOpt, { taskId });
         const res = await Report.findAll({
             where: whereOpt
         })
         return res ? res.map(item => item.dataValues) : null;
     }
 
-    async destoryById(id, userId) {
-        const res = await Report.findOne({ where: { id, userId } });
+    async removeById(ctx, next) {
+        const { id } = ctx.params;
+        try {
+            const res = await Report.findOne({ where: { id } });
+            if (res) {
+                res.destroy();
+                ctx.body = {
+                    code: 200,
+                    message: "删除日报成功",
+                    result: {}
+                }
+            } else {
+                ctx.body = {
+                    code: 409,
+                    message: "删除日报失败",
+                    result: {}
+                }
+            }
+        } catch (err) {
+            console.error("删除日报失败", err);
+            ctx.status = 500;
+            ctx.body = reportRemoveError;
+        }
+    }
+
+    async removeReportsByTaskId(taskId) {
+        const res = await Report.findAll({ where: { taskId } });
         if (res) {
-            return res.destroy();
+            res.forEach(report => report.destroy());
         }
     }
 }

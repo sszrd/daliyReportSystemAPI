@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-const { register, login, changePassword } = require("../controller/user.controller");
+const { register, login, changeUserInfo } = require("../service/user.service.js");
 const { auth } = require("../middleware/auth.middleware");
 const { userValidator, verifyUser, encrpytPassword, verifyLogin } = require("../middleware/user.middleware");
 
@@ -13,6 +13,6 @@ router.post("/register", userValidator, verifyUser, encrpytPassword, register);
 
 router.post("/login", userValidator, verifyLogin, login);
 
-router.patch("/", auth, encrpytPassword, changePassword);
+router.patch("/", auth, encrpytPassword, changeUserInfo);
 
 module.exports = router;

@@ -79,24 +79,59 @@ module.exports = {
         message: "添加条目失败",
         result: {}
     },
-    addPlanError: {
+    addTaskError: {
         code: 500,
-        message: "添加计划失败",
+        message: "添加任务失败",
         result: {}
     },
-    planFindError: {
+    taskFindError: {
         code: 500,
-        message: "查询计划失败",
+        message: "查询任务失败",
         result: {}
     },
-    planRemoveError: {
+    taskRemoveError: {
         code: 500,
-        message: "删除计划失败",
+        message: "删除任务失败",
         result: {}
     },
-    planUpdateError: {
+    taskUpdateError: {
         code: 500,
-        message: "更新计划失败",
+        message: "更新任务失败",
+        result: {}
+    },
+    createTeamError:{
+        code: 500,
+        message: "创建团队失败",
+        result: {}
+    },
+    teamUpdateError:{
+        code: 500,
+        message: "更新团队失败",
+        result: {}
+    },
+    teamFindError: {
+        code: 500,
+        message: "查询团队失败",
+        result: {}
+    },
+    teamRemoveError: {
+        code: 500,
+        message: "删除团队失败",
+        result: {}
+    },
+    createApplicationError:{
+        code: 500,
+        message: "提交申请失败",
+        result: {}
+    },
+    applicationFindError: {
+        code: 500,
+        message: "查询申请失败",
+        result: {}
+    },
+    applicationRemoveError: {
+        code: 500,
+        message: "删除申请失败",
         result: {}
     }
 }

@@ -1,4 +1,4 @@
-const { getUserInfo } = require("../service/user.service");
+const { User } = require("../model/index.model.js");
 const { userFormatError, userAlreadyExited, userDoesNotExit, invalidPassword } = require("../constant/error.type");
 const bcrypt = require("bcryptjs");
 
@@ -17,7 +17,11 @@ const userValidator = async (ctx, next) => {
 const verifyUser = async (ctx, next) => {
     const { username } = ctx.request.body;
     try {
-        const res = await getUserInfo({ username });
+        const whereOpt = {};
+        username && Object.assign(whereOpt, { username });
+        let res = await User.findOne({
+            where: whereOpt
+        })
         if (res) {
             ctx.status = 409;
             ctx.body = userAlreadyExited;
@@ -35,17 +39,25 @@ const verifyUser = async (ctx, next) => {
 //密码加密
 const encrpytPassword = async (ctx, next) => {
     const { password } = ctx.request.body;
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
-    ctx.request.body.password = hash;
-    await next();
+    if (!password) {
+        await next();
+    } else {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+        ctx.request.body.password = hash;
+        await next();
+    }
 }
 
 //验证用户名密码是否匹配
 const verifyLogin = async (ctx, next) => {
     const { username, password } = ctx.request.body;
     try {
-        const res = await getUserInfo({ username });
+        const whereOpt = {};
+        username && Object.assign(whereOpt, { username });
+        let res = await User.findOne({
+            where: whereOpt
+        })
         if (!res) {
             ctx.status = 403;
             ctx.body = userDoesNotExit;

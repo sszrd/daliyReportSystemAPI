@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../db/seq");
-const Plan = require("./plan.model.js");
 
 const Item = seq.define("item", {
     text: {
@@ -14,21 +13,11 @@ const Item = seq.define("item", {
         defaultValue: false,
         comment: "是否完成",
     },
-    planId: {
+    taskId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         comment: "属于哪个计划"
     }
-})
-
-Item.belongsTo(Plan, {
-    foreignKey: "planId",
-    targetKey: "id"
-})
-
-Plan.hasMany(Item, {
-    foreignKey: "planId",
-    sourceKey: "id"
 })
 
 module.exports = Item;

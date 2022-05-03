@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../db/seq");
-const User = require("./user.model.js");
 
 const Report = seq.define("report", {
     title: {
@@ -28,26 +27,16 @@ const Report = seq.define("report", {
         allowNull: false,
         comment: "用时"
     },
-    percent: {
-        type: DataTypes.DOUBLE,
-        allowNull: true,
-        comment: "进度"
-    },
-    userId: {
+    taskId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: "作者"
+        comment: "所属计划"
+    },
+    createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "所属用户"
     }
-})
-
-Report.belongsTo(User, {
-    foreignKey: "userId",
-    targetKey: "id"
-})
-
-User.hasMany(Report, {
-    foreignKey: "userId",
-    sourceKey: "id"
 })
 
 module.exports = Report;
