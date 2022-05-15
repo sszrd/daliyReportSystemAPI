@@ -120,6 +120,15 @@ class TeamService {
             return null;
         }
     }
+
+    async getTeamInfo(createdBy) {
+        const res = await Team.findOne({ where: { createdBy } });
+        if (res) {
+            return res.dataValues;
+        } else {
+            return null;
+        }
+    }
 }
 
 module.exports = new TeamService();

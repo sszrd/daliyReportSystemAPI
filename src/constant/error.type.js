@@ -39,6 +39,11 @@ module.exports = {
         message: "用户信息更新失败",
         result: {}
     },
+    getUserError: {
+        code: 500,
+        message: "用户信息获取失败",
+        result: {}
+    },
     addReportError: {
         code: 500,
         message: "添加日报失败",
@@ -99,12 +104,12 @@ module.exports = {
         message: "更新任务失败",
         result: {}
     },
-    createTeamError:{
+    createTeamError: {
         code: 500,
         message: "创建团队失败",
         result: {}
     },
-    teamUpdateError:{
+    teamUpdateError: {
         code: 500,
         message: "更新团队失败",
         result: {}
@@ -119,7 +124,7 @@ module.exports = {
         message: "删除团队失败",
         result: {}
     },
-    createApplicationError:{
+    createApplicationError: {
         code: 500,
         message: "提交申请失败",
         result: {}

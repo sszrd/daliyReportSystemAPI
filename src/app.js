@@ -7,7 +7,7 @@ const router = require('./routes/index.js');
 
 app.use(cors({
   origin: function (ctx) {
-    return 'http://localhost:3000';
+    return 'http://172.16.58.20:3000';
   },
   maxAge: 60,
   credentials: true,

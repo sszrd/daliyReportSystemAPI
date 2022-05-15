@@ -1,6 +1,7 @@
 const { User } = require("../model/index.model.js");
 const jwt = require("jsonwebtoken");
-const { userRegisterError, userUpdateError } = require("../constant/error.type");
+const { userRegisterError, userUpdateError, getUserError } = require("../constant/error.type");
+const { getReportsInfoByUser } = require("./report.service.js");
 const { JWT_SECRET } = require("../constant/env");
 
 class UserService {
@@ -41,7 +42,8 @@ class UserService {
                 result: {
                     token: jwt.sign(load, JWT_SECRET, { expiresIn: "1d" }),
                     isadmin: load.isadmin,
-                    teamId: load.teamId
+                    teamId: load.teamId,
+                    username
                 }
             }
         } catch (err) {
@@ -59,8 +61,12 @@ class UserService {
             const newUser = {};
             username && Object.assign(newUser, { username });
             password && Object.assign(newUser, { password });
-            isadmin && Object.assign(newUser, { isadmin });
-            teamId && Object.assign(newUser, { teamId });
+            if (isadmin !== undefined) {
+                Object.assign(newUser, { isadmin });
+            }
+            if (teamId !== undefined) {
+                Object.assign(newUser, { teamId });
+            }
             const res = await User.update(newUser, { where: whereOpt });
             if (res) {
                 ctx.body = {
@@ -79,6 +85,56 @@ class UserService {
             console.error("获取用户信息失败", err);
             ctx.status = 500;
             ctx.body = userUpdateError;
+        }
+    }
+
+    async changeUserInfoById(ctx, next) {
+        const id = ctx.params;
+        const { teamId } = ctx.request.body;
+        try {
+            const res = await User.update({ teamId }, { where: id });
+            if (res) {
+                ctx.body = {
+                    code: 200,
+                    message: "修改用户信息成功",
+                    result: {}
+                }
+            } else {
+                ctx.body = {
+                    code: 409,
+                    message: "修改用户信息失败",
+                    result: {}
+                }
+            }
+        } catch (err) {
+            console.error("获取用户信息失败", err);
+            ctx.status = 500;
+            ctx.body = userUpdateError;
+        }
+    }
+
+    async getUserInfo(ctx, next) {
+        const id = ctx.state.user.id;
+        try {
+            let res = await User.findOne({ where: { id } });
+            res = res ? res.dataValues : null;
+            if (res) {
+                ctx.body = {
+                    code: 200,
+                    message: "获取用户信息成功",
+                    result: { ...res }
+                }
+            } else {
+                ctx.body = {
+                    code: 409,
+                    message: "获取用户信息失败",
+                    result: {}
+                }
+            }
+        } catch (err) {
+            console.error("获取用户信息失败", err);
+            ctx.status = 500;
+            ctx.body = getUserError;
         }
     }
 
@@ -101,12 +157,13 @@ class UserService {
         let res = await User.findAll({
             where: whereOpt
         })
-        res = res ? res.map(each => {
-            const { password, ...info } = each.dataValues;
-            return info;
-        }) : null;
-        console.log(res);
-        return res ? res : [];
+        const users = [];
+        for (let i = 0; i < res.length; i++) {
+            const reports = await getReportsInfoByUser(res[i].dataValues.id);
+            const { password, ...info } = res[i].dataValues;
+            users.push({ ...info, reports });
+        }
+        return users;
     }
 
     async changeUserTeamId(userId, teamId) {

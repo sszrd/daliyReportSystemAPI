@@ -103,16 +103,14 @@ class ReportService {
         const whereOpt = {};
         createdBy && Object.assign(whereOpt, { createdBy });
         try {
-            const res = await Report.findAll({
+            let res = await Report.findAll({
                 where: whereOpt
             })
             res = res ? res.map(item => item.dataValues) : null;
             ctx.body = {
                 code: 200,
                 messgae: "查询成功",
-                result: {
-                    ...res
-                }
+                result: res
             }
         } catch (err) {
             console.error("通过用户id查询日报失败", err);
@@ -153,6 +151,11 @@ class ReportService {
             ctx.status = 500;
             ctx.body = reportRemoveError;
         }
+    }
+
+    async getReportsInfoByUser(createdBy) {
+        let res = await Report.findAll({ where: { createdBy } });
+        return res ? res.map(each => each.dataValues) : [];
     }
 
     async removeReportsByTaskId(taskId) {

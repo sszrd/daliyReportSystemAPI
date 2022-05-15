@@ -1,0 +1,65 @@
+[33mcommit bb43b5d37b47af97b28e5282ed7efc37deb478dd[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Tue May 3 19:42:47 2022 +0800
+
+    add team module and application module,remove foreign keys
+
+[33mcommit 0aaf309b14e9d7983a3f7f345556e9c7b16e882d[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Sat Apr 9 19:09:02 2022 +0800
+
+    fixed an issue that input 0 was excluded
+
+[33mcommit 122a4206ee4208fb4e2a96c24c944fa98f85f49f[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Sat Apr 9 19:06:43 2022 +0800
+
+    added username to response when login successful
+
+[33mcommit 36150c9918916fd3797ac33ad63b34d0f9c2cc5d[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Thu Mar 31 03:53:52 2022 +0800
+
+    change http-response-code's type from string to number
+
+[33mcommit c58a5d314ca370b9692d74e0a6f4a1fdce03891c[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Tue Mar 29 21:13:45 2022 +0800
+
+    add column startAt for table plans
+
+[33mcommit 1b67077c84aac1db9822dda772a23697625db73c[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Tue Mar 29 19:21:03 2022 +0800
+
+    repair bug for isFinish just set by true
+
+[33mcommit 2eb4fedabeac57906e0898e9c7473053b282ce3c[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Mon Mar 28 16:21:58 2022 +0800
+
+    add plan and item
+
+[33mcommit 324cea76dd8f10b3c9e3156a6a452206a74dc62b[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Sun Mar 20 15:19:22 2022 +0800
+
+    report finish
+
+[33mcommit 259a5706107345fbfda4c42b19a4a27793ebb6ab[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Fri Mar 18 16:02:04 2022 +0800
+
+    finish user
+
+[33mcommit 1e57ca3a7e9f62bb1c461c979d7a5337b353e6d5[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Sat Feb 12 15:41:07 2022 +0800
+
+    用户模块完成
+
+[33mcommit ec147ba525e1a3fd7a8908ab6321a0e1c8bf0eb4[m
+Author: Wang Zijie <1327000313@qq.com>
+Date:   Wed Feb 9 19:25:49 2022 +0800
+
+    注册接口完成

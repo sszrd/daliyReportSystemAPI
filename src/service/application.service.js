@@ -1,6 +1,7 @@
 const { Application } = require("../model/index.model.js");
-const { createApplicationError,applicationFindError,applicationRemoveError } = require("../constant/error.type");
-const { getTeamManagerId } = require("../service/team.service.js");
+const { createApplicationError, applicationFindError, applicationRemoveError } = require("../constant/error.type");
+const { getTeamManagerId, getTeamInfo } = require("../service/team.service.js");
+const { getUserInfoById } = require("../service/user.service.js");
 
 class ApplicationService {
     async createApplication(ctx, next) {
@@ -34,15 +35,16 @@ class ApplicationService {
                 where: { id }
             })
             res = res ? res.dataValues : null;
+            const team = res ? await getTeamInfo(res.checkedBy) : {};
+            const appliedUser = res ? await getUserInfoById(res.appliedBy) : {};
+            const checkedUser = res ? await getUserInfoById(res.checkedBy) : {};
             ctx.body = {
                 code: 200,
                 messgae: "查询成功",
-                result: {
-                    ...res,
-                }
+                result: [{ ...res, team, appliedUser, checkedUser }],
             }
         } catch (err) {
-            console.error("通过id查询条目失败", err);
+            console.error("通过id查询申请失败", err);
             ctx.status = 500;
             ctx.body = applicationFindError;
         }
@@ -56,27 +58,33 @@ class ApplicationService {
             })
             res = res ? res.dataValues : null;
             if (res) {
+                const team = await getTeamInfo(res.checkedBy);
+                const appliedUser = res ? await getUserInfoById(res.appliedBy) : {};
+                const checkedUser = res ? await getUserInfoById(res.checkedBy) : {};
                 ctx.body = {
                     code: 200,
                     messgae: "查询成功",
-                    result: {
-                        ...res,
-                    }
+                    result: [{ ...res, team, appliedUser, checkedUser }]
                 }
             } else {
                 let res = await Application.findAll({
                     where: { checkedBy: userId }
                 })
-                res = res ? res.map(each => each.dataValues) : [];
+                const applications = [];
+                for (let i = 0; i < res.length; i++) {
+                    const appliedUser = await getUserInfoById(res[i].dataValues.appliedBy);
+                    const checkedUser = await await getUserInfoById(res[i].dataValues.checkedBy);
+                    const team = await getTeamInfo(res[i].dataValues.checkedBy);
+                    applications.push({ ...res[i].dataValues, team, appliedUser, checkedUser });
+                }
                 ctx.body = {
                     code: 200,
                     messgae: "查询成功",
-                    result: res
+                    result: applications
                 }
             }
-
         } catch (err) {
-            console.error("通过id查询条目失败", err);
+            console.error("通过id查询申请失败", err);
             ctx.status = 500;
             ctx.body = applicationFindError;
         }
@@ -87,6 +95,7 @@ class ApplicationService {
         try {
             const res = await Application.findOne({ where: { id } });
             if (res) {
+                res.destroy();
                 ctx.body = {
                     code: 200,
                     message: "撤销申请成功",
